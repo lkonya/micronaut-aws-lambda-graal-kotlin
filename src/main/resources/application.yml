@@ -1,0 +1,10 @@
+micronaut:
+    application:
+        name: aws-lambda-graal-kotlin
+#rss:
+#    baseurl: https://www.comingsoon.net
+#    path: /feed
+
+rss:
+    baseurl: https://www.fandango.com/rss
+    path: /comingsoonmovies.rss

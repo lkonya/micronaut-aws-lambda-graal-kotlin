@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: aws.lambda.graal.kotlin
+---
+testFramework: spek
+sourceLanguage: kotlin

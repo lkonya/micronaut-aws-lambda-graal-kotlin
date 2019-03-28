@@ -16,10 +16,8 @@ class RssFeedClient(@Client("\${rss.baseurl}") @Inject private val httpclient: R
                     @Property(name = "rss.path") private val path: String) {
 
     fun fetchRssFromRaw(): Flowable<SyndFeed> =
-            fetchRawRss().map { createFeed(it.byteInputStream()) }
-
-    fun fetchRss(): Flowable<SyndFeed> =
-            httpclient.exchange(path).map { createFeed(it.body()?.toInputStream()) }
+            fetchRawRss()
+                    .map { createFeed(it.replaceFirst("""version="0.91"""", """version="0.93"""").byteInputStream()) }
 
     fun fetchRawRss(): Flowable<String> =
             httpclient.exchange(path, String::class.java).map { it.body() }

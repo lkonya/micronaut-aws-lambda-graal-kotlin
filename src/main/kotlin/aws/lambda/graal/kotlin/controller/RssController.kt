@@ -12,7 +12,6 @@ import io.reactivex.Flowable
 @Controller("/rss")
 class RssController(private val feedClient: RssFeedClient) {
 
-
     @Get("/feed")
     fun feed(): Flowable<RssFeeds> =
             feedClient.fetchRssFromRaw()
@@ -20,5 +19,4 @@ class RssController(private val feedClient: RssFeedClient) {
 
     @Get(value = "/raw", produces = [TEXT_XML])
     fun raw(): Flowable<String> = feedClient.fetchRawRss()
-
 }

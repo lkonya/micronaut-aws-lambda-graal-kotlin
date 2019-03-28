@@ -8,7 +8,11 @@ jackson:
 #  writeDatesAsTimestamps: true TODO PR to update docs?
 
 rss:
-#  baseurl: https://www.blu-ray.com/rss
-#  path: /newreleasesfeed.xml
-  baseurl: https://www.fandango.com/rss
-  path: /comingsoonmovies.rss
+#  baseurl: https://www.blu-ray.com
+#  path: /rss/newreleasesfeed.xml
+#  baseurl: https://movieweb.com
+#  path: /rss/new-movies/
+#  baseurl: https://www.metacritic.com
+#  path: /rss/movies
+  baseurl: https://www.bigscreen.com
+  path: /xml/nowshowing_new.xml

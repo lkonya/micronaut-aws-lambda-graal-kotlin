@@ -1,29 +1,49 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: AWS Serverless Micronaut API - aws.lambda.graal.kotlin::aws-lambda-graal-kotlin
 Globals:
   Api:
     EndpointConfiguration: REGIONAL
 Resources:
-  MyServiceFunction:
+  rssItems:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-rssItems
+    Metadata:
+      StackeryName: rssItems
+  rssPoller:
     Type: AWS::Serverless::Function
     Properties:
       Handler: not.used.in.provided.runtime
       Runtime: provided
       CodeUri: build/function.zip
       MemorySize: 128
-      Policies: AWSLambdaBasicExecutionRole
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt rssItems.QueueName
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt rssItems.QueueName
       Timeout: 15
+      Environment:
+        Variables:
+          QUEUE_NAME: !GetAtt rssItems.QueueName
+          QUEUE_ARN: !GetAtt rssItems.Arn
+          QUEUE_URL: !Ref rssItems
+          QUEUE_NAME_2: !GetAtt rssItems.QueueName
+          QUEUE_ARN_2: !GetAtt rssItems.Arn
+          QUEUE_URL_2: !Ref rssItems
       Events:
-        GetResource:
+        ServerlessRestApiGETfeed:
           Type: Api
           Properties:
-            Path: /{proxy+}
-            Method: any
-
+            Path: /feed
+            Method: GET
+    Metadata:
+      StackeryName: rssPoller
 Outputs:
   MyServiceApi:
     Description: URL for application
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping'
+    Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping
     Export:
       Name: MyServiceApi
